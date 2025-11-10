@@ -1,6 +1,6 @@
-
 import numpy as np
 import matplotlib.pyplot as plt
+
 
 class RNN:
     def __init__(self, input_size, hidden_size, output_size, lr=1e-3, seed=1):
@@ -111,6 +111,16 @@ class RNN:
             if verbose and (epoch % max(1, epochs // 10) == 0 or epoch == 1):
                 print(f"Epoch {epoch}/{epochs} - loss: {epoch_loss:.6f}")
         return losses
+
+
+def generate_sine_sequences(n_samples=2000, seq_len=20, input_size=1, seed=0):
+    rng = np.random.RandomState(seed)
+    x = np.linspace(0, 50, n_samples * seq_len * input_size)
+    data = np.sin(x) + 0.1 * rng.randn(n_samples * seq_len * input_size)
+    X = data.reshape(n_samples, seq_len, input_size)
+    rolled = np.roll(data, -1).reshape(n_samples, seq_len, input_size)
+    y_last = rolled[:, -1, :]
+    return X.astype(np.float32), y_last.astype(np.float32)
 
 
 # Creating the data
